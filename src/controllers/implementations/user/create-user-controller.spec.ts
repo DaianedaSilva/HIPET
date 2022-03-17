@@ -1,6 +1,6 @@
 import { CreateUserController } from './create-user-controller'
-import { ServerError } from '../../errors'
-import { serverError, success } from '../../helpers/http-helpers'
+import { MissingParamError, ServerError } from '../../errors'
+import { badRequest, serverError, success } from '../../helpers/http-helpers'
 import { makeCreateUserUseCase } from '../../../usecases/mock'
 import { CreateUserContract } from '../../../usecases/contracts'
 import { HttpRequest } from '../../contracts'
@@ -23,7 +23,7 @@ const mockBody = {
   name: 'any_name',
   email: 'any_email@mail.com',
   password: 'any_password',
-  phoneNumber: '(00)1234-5678'
+  phoneNumber: '(00) 1234-5678'
 }
 
 const makeRequest = (body: any): HttpRequest => ({ body })
@@ -39,7 +39,13 @@ describe('Create User Controller', () => {
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 
-  test('Should return 200', async () => {
+  test('Should return 400 if is missing a parameter', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeRequest({}))
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
+  })
+
+  test('Should return 200 if is a sucess', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeRequest(mockBody))
     expect(httpResponse).toEqual(success({
@@ -49,7 +55,7 @@ describe('Create User Controller', () => {
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
-        phoneNumber: '(00)1234-5678'
+        phoneNumber: '(00) 1234-5678'
       }
     }))
   })

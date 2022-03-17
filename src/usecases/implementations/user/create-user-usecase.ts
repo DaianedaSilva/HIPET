@@ -1,6 +1,6 @@
 import { User } from '../../../entities'
 import { UserRepository } from '../../../repositories/contracts'
-import { CreateUserContract, CreateUserDto } from '../../contracts'
+import { CreateUserContract, CreateUserDto, CreateUserResult, CreateUserResultStatusOptions } from '../../contracts'
 
 type Dependencies = {
   userRepository: UserRepository
@@ -13,7 +13,11 @@ export class CreateUserUseCase implements CreateUserContract {
     this.userRepository = dependencies.userRepository
   }
 
-  async execute (userDto: CreateUserDto): Promise<any> {
+  private result (user: User, status: CreateUserResultStatusOptions = CreateUserResultStatusOptions.success): CreateUserResult {
+    return { status, user }
+  }
+
+  async execute (userDto: CreateUserDto): Promise<CreateUserResult> {
     const user = new User()
 
     user.name = userDto.name
@@ -21,12 +25,10 @@ export class CreateUserUseCase implements CreateUserContract {
     user.password = userDto.password
     user.phoneNumber = userDto.phoneNumber
 
-    const result = await this.userRepository.add(user)
-    console.log(result)
+    const createdUser = await this.userRepository.add(user)
 
-    return {
-      status: 'SUCCESS',
-      user: result
-    }
+    if (!createdUser) return this.result(createdUser, CreateUserResultStatusOptions.repository_error)
+
+    return this.result(createdUser)
   }
 }

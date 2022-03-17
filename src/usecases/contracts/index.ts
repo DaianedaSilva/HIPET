@@ -1,5 +1,5 @@
 // apresentation contracts
-export * from './apresentation/version-contract'
+export * from './apresentation-contract'
 
 // user usecase contracts
-export * from './user/user-contract'
+export * from './user-contract'
