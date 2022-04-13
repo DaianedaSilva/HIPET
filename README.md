@@ -52,7 +52,7 @@ npm run test:ci
 ### Conectar ao banco
 Para conectar ao banco, adicione no arquivo .env na raiz do projeto a linha de conexão com o banco:
 ``` 
-Arquivo .env>-: NODE_ENV=dev
+NODE_ENV=dev
 SERVER_PORT=5050
 **MONGO_URL=mongodb+srv://hipetUser:<SENHA>@cluster0.ghnnu.mongodb.net/hipet?retryWrites=true&w=majority**
 ```
