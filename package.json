@@ -4,8 +4,10 @@
   "description": "API para o sistema HIPET",
   "main": "index.js",
   "scripts": {
+    "dev": "sucrase-node src/main/server.ts",
+    "build": "tsc",
     "install-dependencie":  "npm run install-dependencie",
-    "start": "sucrase-node src/main/server.ts",
+    "start": "node dist/src/main/server.js",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
